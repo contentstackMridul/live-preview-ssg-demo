@@ -8,6 +8,7 @@ import { Stack, onEntryChange } from '../utils';
 import RefField1 from './ref_field';
 import Contentstack from 'contentstack';
 
+// This function is used to fetch the entry content from the the contentstack server
 const fetchData = async () => {
   const result = await Stack.ContentType("csr_demo").Query().includeReference(["modular_blocks.ref_field_1.reference", "modular_blocks.ref_field_2.reference"]).toJSON().find();
   return result[0][0] || {};
@@ -22,12 +23,17 @@ export const getStaticProps: GetStaticProps = async () => {
 export default function Home(props) {
   const [entry, setEntry] = useState(props.initialEntry);
 
+  // Using the useEffect function with blank properties to add onEntryChange function. which will be responsible for updating the website whenever there will be modifications in contentstack entry
   useEffect(() => {
+    // This onEntryChange function is responsible for updating the the website whenever there is changes in contentstack entry. This onEntryChange function will call the callback function you pass as 
+    // an argument every time there is a change in contentstack entry.
     onEntryChange(async () => {
+      // Here call this function fetchData to fetch the entry data from contentstack server
       const newEntry = await fetchData();
+      // adding edit button tag data to the entry data so that we can see the edit button on hover of component.
       Contentstack.Utils.addEditableTags(newEntry,"csr_demo",true,newEntry?.locale);
       console.log('new entry',newEntry);
-      
+      // setting new entry data to the entry state to re-render the website.
       setEntry(newEntry);
     });
   }, []);
@@ -47,27 +53,32 @@ export default function Home(props) {
     />
       </Head>
       <div className={layoutStyles.layout}>
+        {/* Rendering a other component to render the content inside Home page component. Passing the fetched entry to this component so that it render the data without making another call to server */}
         <Content isEdit={false} edits={[]} entry={entry} />
       </div>
     </>
   );
 }
 
-
+// this Functional component responsible for displaying the content of the home component entry
 function Content({ isEdit, edits, entry }: { isEdit: boolean; edits: FieldEdit[], entry: any }) {
 
+{/* This function is responsible to render the modular block fields of entry */}
   const fetchRefFieldData = () => {
     return (
       <div className="explanation">
         {
+          // Running the loop on all the modular blocks available in the entry to render it accordingly. For the loop getting the entry data from the upper component
           entry.modular_blocks.map((block) => {
             if (block.ref_field_1) {
               const refEntry = block.ref_field_1.reference?.["0"];
+              // rendering a new separate component for the ref_field_1 reference modular block
               return (
                 <RefField1 refEntry={refEntry} />
               )
             } else {
               const refEntry = block.ref_field_2.reference?.["0"];
+              // Rendering a basic modular block here 
               return (
                 <>
                   <Malleable id="explanation-2" isActive={isEdit} edits={edits}>
@@ -86,10 +97,13 @@ function Content({ isEdit, edits, entry }: { isEdit: boolean; edits: FieldEdit[]
 
   return (
     <>
+    {/* Malleable is just a basic design component. The SSG example is not dependent on this component anyhow so you can ignore this component  */}
       <Malleable  id="title" as="h1" isActive={isEdit} edits={edits}>
+        {/* Rendering the title of entry */}
         <p {...entry?.$?.title}> {entry.title} </p>
       </Malleable>
       <Malleable as="h2" id="title-2" isActive={isEdit} edits={edits}>
+        {/* rendering the single line field of entry */}
         <p {...entry?.$?.single_line}> {entry.single_line}</p>
       </Malleable>
       <hr />
@@ -111,7 +125,7 @@ function Content({ isEdit, edits, entry }: { isEdit: boolean; edits: FieldEdit[]
         .
       </Malleable>
 
-
+{/* This function is responsible to render the modular block fields of entry */}
       { fetchRefFieldData() }
     </>
   );

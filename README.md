@@ -2,23 +2,24 @@
 
 This demo showcases Next.js' next-gen Static Site Generation (SSG) support.
 
-## About
+## How to use this demo
 
-Next.js is the first hybrid framework, allowing you to choose the technique
-that fits your use case best on a per-page basis:
-[Static Generation or On-Demand rendering](https://nextjs.org/docs/basic-features/data-fetching).
+In this demo, there are 3 main files that you have to check to understand the live preview for ssg
+1. ``` src/pages/index.tsx ```
+   This file have two components
+    a. Home component
+       This component will fetch the data from contentstack server and render the page
+    b. Content component
+        This component will help Home component to render the page content.
+2. ``` src/pages/ref_field.tsx ```
+    This file contain RefField1 component which will render the reference field data. We are using this component inside Content component present in src/pages/index.tsx file.
+3. ``` src/utils.js ``` 
+    In this file we are initalizing the Contentstack SDK and Live Preview SDK. This is the ideal way to initialize both sdk. After initialization we are exporting the function and importing in the 
+    other components. You can check this in Home component. Please use you own credential to initialize the Contentstack sdk.
 
-This application solely focuses on Static Generation (using `getStaticProps`),
-however, with a game-changing new feature: Preview Mode.
+> Note: you will find the details comments of code inside the files itself for better understanding.
 
-[Take Preview Mode for a spin](https://next-preview.vercel.app/)!
-
-Preview Mode leverages Next.js' on-demand rendering capabilities to bypass the
-statically prerendered page and render the page on-demand for
-**authorized users**.
-
-This feature is incredibly valuable for content editors who want to view
-real-time draft content from their CMS, among other use cases.
+> ** There are some other files as well but those are not concerned us.  **
 
 ## Learn More
 
