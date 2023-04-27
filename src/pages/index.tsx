@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import Malleable, { FieldEdit } from '../components/malleable';
 import layoutStyles from '../styles/layout.module.css';
-import { Stack, onEntryChange } from '../utils';
+import { Stack, onEntryChange, onLiveEdit } from '../utils';
 import RefField1 from './ref_field';
 import Contentstack from 'contentstack';
 
@@ -25,9 +25,12 @@ export default function Home(props) {
 
   // Using the useEffect function with blank properties to add onEntryChange function. which will be responsible for updating the website whenever there will be modifications in contentstack entry
   useEffect(() => {
-    // This onEntryChange function is responsible for updating the the website whenever there is changes in contentstack entry. This onEntryChange function will call the callback function you pass as 
+    // This onLiveEdit function is responsible for updating the the website whenever there is changes in contentstack entry. This onLiveEdit function will call the callback function you pass as 
     // an argument every time there is a change in contentstack entry.
-    onEntryChange(async () => {
+    // Please use ( https://github.com/contentstack/live-preview-sdk/blob/main/docs/live-preview-configs.md#onliveeditcallback---void ) this 
+    // url for information about onLiveEdit 
+
+    onLiveEdit(async () => {
       // Here call this function fetchData to fetch the entry data from contentstack server
       const newEntry = await fetchData();
       // adding edit button tag data to the entry data so that we can see the edit button on hover of component.
@@ -36,6 +39,20 @@ export default function Home(props) {
       // setting new entry data to the entry state to re-render the website.
       setEntry(newEntry);
     });
+
+    // Similarly we can use onEntryChange to update the entry data.
+
+    // onEntryChange(async () => {
+    //   // Here call this function fetchData to fetch the entry data from contentstack server
+    //   const newEntry = await fetchData();
+    //   // adding edit button tag data to the entry data so that we can see the edit button on hover of component.
+    //   Contentstack.Utils.addEditableTags(newEntry,"csr_demo",true,newEntry?.locale);
+    //   console.log('new entry',newEntry);
+    //   // setting new entry data to the entry state to re-render the website.
+    //   setEntry(newEntry);
+    // });
+
+
   }, []);
 
   return (

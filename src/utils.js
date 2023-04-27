@@ -4,14 +4,14 @@ import Contentstack from 'contentstack';
 
 export const Stack = Contentstack.Stack({
   // user your own credentials
-  api_key: "bltcf74a9ab795009ca", // you stack api key
-  delivery_token: "cs9b220eda212bb79c63ea9ec1", // delivery token
-  environment: "ssr", // environment on which you published the entry
+  api_key: "your api key", // you stack api key
+  delivery_token: "your delivery token", // delivery token
+  environment: "Your environment", // environment on which you published the entry
   // To initialize the live preview
   live_preview: {
     enable: true,
     host: "api.contentstack.io", 
-    management_token: "csbca50eadf01e8d1c6d75e2ed",
+    management_token: "your management token",
   },
 });
 
@@ -25,3 +25,4 @@ ContentstackLivePreview.init({
 });
 
 export const onEntryChange = ContentstackLivePreview.onEntryChange;
+export const onLiveEdit = ContentstackLivePreview.onLiveEdit;
